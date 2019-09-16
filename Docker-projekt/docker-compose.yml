@@ -1,0 +1,37 @@
+version: '3'
+services:
+
+  app:
+    container_name: app
+    build: ./app
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+
+  nginx: 
+    image: nginx:latest
+    container_name: nginx
+    build: ./nginx.conf
+    ports:
+      - 8888:8888
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db' 
+      MYSQL_USER: 'user'  
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
